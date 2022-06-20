@@ -22,7 +22,7 @@ public class UserService {
     public User getUserByUsername(String username){
         for(User user:list)
         {
-            if(user.getUsername()==username)
+            if(user.getUsername().equals(username))
                 return user;
         }
         return null;
@@ -36,13 +36,14 @@ public class UserService {
     public User updateUser(User user){
         for(User u :list)
         {
-            if(u.getUsername()== user.getUsername())
+            if(u.getUsername().equals(user.getUsername()))
             {
                u.setName(user.getName());
                u.setAddress(user.getAddress());
                u.setAge(user.getAge());
+               return u;
             }
-            return user;
+         
         }
         return null;
     }
@@ -50,8 +51,12 @@ public class UserService {
     public void deleteUser(String username){
         for(User user:list)
         {
-            if(user.getName()==username)
-                list.remove(user);
+            if(user.getUsername().equals(username))
+            {
+            	 list.remove(user);
+            	 return;
+            }
+               
         }
         return ;
     }
