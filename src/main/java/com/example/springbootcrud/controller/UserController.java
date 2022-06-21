@@ -1,5 +1,6 @@
 package com.example.springbootcrud.controller;
 
+import com.example.springbootcrud.exception.UserNotFoundException;
 import com.example.springbootcrud.model.User;
 import com.example.springbootcrud.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,33 +17,34 @@ public class UserController {
     UserService userService;
 
     @GetMapping("/users")
-    public List<User> getUsers(){
-        return userService.getUsers();
+    public ResponseEntity<List<User>> getUsers(){
+        return new ResponseEntity<>(userService.getUsers(),HttpStatus.OK);
     }
 
     @GetMapping("/users/{username}")
     public User getUserByUsername(@PathVariable String username){
-        return userService.getUserByUsername(username);
+
+            User user= userService.getUserByUsername(username);
+            return user;
     }
 
     @PostMapping("/users")
-    public User addUser(@RequestBody User user){
-        return userService.addUser(user);
+    public ResponseEntity<User> addUser(@RequestBody User user){
+        User newuser= userService.addUser(user);
+        return new ResponseEntity<>(newuser,HttpStatus.CREATED);
     }
 
     @PutMapping("/users")
-    public User updateUser(@RequestBody User user){
-        return userService.updateUser(user);
+    public ResponseEntity<User> updateUser(@RequestBody User user){
+        User updatedUser=userService.updateUser(user);
+        return new ResponseEntity<>(updatedUser,HttpStatus.CREATED);
     }
 
     @DeleteMapping("/users/{username}")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable String username){
-        try {
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable String username) {
+
             userService.deleteUser(username);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+
     }
 }

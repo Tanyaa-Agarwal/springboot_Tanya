@@ -1,5 +1,7 @@
 package com.example.springbootcrud.service;
 
+import com.example.springbootcrud.exception.UserAlreadyExists;
+import com.example.springbootcrud.exception.UserNotFoundException;
 import com.example.springbootcrud.model.User;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +27,15 @@ public class UserService {
             if(user.getUsername().equals(username))
                 return user;
         }
-        return null;
+        throw new UserNotFoundException("User not found with username: "+username);
     }
 
     public User addUser(User user){
+        for(User u:list)
+        {
+            if(u.getUsername().equals(user.getUsername()))
+               throw new UserAlreadyExists("User already exits with the username: "+user.getUsername());
+        }
         list.add(user);
         return user;
     }
@@ -45,7 +52,7 @@ public class UserService {
             }
          
         }
-        return null;
+        throw new UserNotFoundException("User not found with username: "+user.getUsername());
     }
 
     public void deleteUser(String username){
@@ -58,6 +65,6 @@ public class UserService {
             }
                
         }
-        return ;
+       throw new UserNotFoundException("User not found with username: "+username);
     }
 }
