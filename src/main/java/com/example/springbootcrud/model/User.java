@@ -1,6 +1,15 @@
 package com.example.springbootcrud.model;
 
-public class User {
+import org.springframework.data.redis.core.RedisHash;
+import org.springframework.stereotype.Component;
+
+import java.io.Serializable;
+
+
+@Component
+public class User implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     private String username;
     private String name;
     private int age;
