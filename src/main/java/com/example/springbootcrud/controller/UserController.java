@@ -1,5 +1,4 @@
 package com.example.springbootcrud.controller;
-
 import com.example.springbootcrud.exception.UserNotFoundException;
 import com.example.springbootcrud.model.User;
 import com.example.springbootcrud.service.UserService;
