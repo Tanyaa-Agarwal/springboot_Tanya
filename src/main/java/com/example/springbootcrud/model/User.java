@@ -1,15 +1,19 @@
 package com.example.springbootcrud.model;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 
 @Component
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    @Id
     private String username;
     private String name;
     private int age;
@@ -24,6 +28,7 @@ public class User implements Serializable {
 
     public User() {
     }
+
 
     public String getUsername() {
         return username;

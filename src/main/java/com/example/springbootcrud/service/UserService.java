@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 @Service
 public class UserService {
 
@@ -42,14 +44,29 @@ public class UserService {
 //            if(user.getUsername().equals(username))
 //                return user;
 //        }
+        try{
+            User user =(User)hashOperations.get("User", username);
+            if(!user.equals(null))
+            return user;
+        }
+        catch (NullPointerException e)
+        {
+           throw new UserNotFoundException("user not found");
+        }
+        return null;
 
-//        throw new UserNotFoundException("User not found with username: "+username);
-        return (User) hashOperations.get("User", username);
+
     }
 
     public User addUser(User user){
-        hashOperations.put("User", user.getUsername(), user);
-        return user;
+
+            boolean check_is_added=hashOperations.putIfAbsent("User", user.getUsername(), user);
+            if(check_is_added)
+                return user;
+            else
+                throw new UserAlreadyExists("user already exists");
+
+
 //        for(User u:list)
 //        {
 //            if(u.getUsername().equals(user.getUsername()))
@@ -72,8 +89,16 @@ public class UserService {
 //
 //        }
 //        throw new UserNotFoundException("User not found with username: "+user.getUsername());
-        hashOperations.put("User", user.getUsername(), user);
-        return user;
+        try {
+
+            hashOperations.put("User", user.getUsername(), user);
+            return user;
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+
     }
 
     public void deleteUser(String username){
@@ -87,7 +112,10 @@ public class UserService {
 //
 //        }
 //       throw new UserNotFoundException("User not found with username: "+username);
-        hashOperations.delete("User", username);
-        return ;
+      int check_if_deleted= Math.toIntExact(hashOperations.delete("User", username));
+        if(check_if_deleted==1)
+            return;
+        else
+            throw new UserNotFoundException("user not found");
     }
 }
